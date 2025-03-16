@@ -37,6 +37,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 // Add RabbitMQ
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(builder.Configuration["Redis:ConnectionString"]));
 builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
+
+// Ensuring RabbitMQConsumer implements IHostedService
 builder.Services.AddHostedService<RabbitMQConsumer>();
 
 var app = builder.Build();
@@ -45,7 +47,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Address Book API v1"));
 }
 
 app.UseHttpsRedirection();

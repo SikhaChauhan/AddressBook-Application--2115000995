@@ -11,9 +11,9 @@ namespace RepositoryLayer.Service
 {
     public class UserRL : IUserRL
     {
-        private readonly AddressBookEntity _context;
+        private readonly AddressBookDBContext _context;
 
-        public UserRL(AddressBookEntity context)
+        public UserRL(AddressBookDBContext context)
         {
             _context = context;
         }
@@ -28,6 +28,12 @@ namespace RepositoryLayer.Service
         public async Task<UserEntity> GetUserByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task UpdateUser(UserEntity user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

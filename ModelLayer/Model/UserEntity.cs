@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ModelLayer.Model
-{
-    //User entity created
+{   //User Entity Model
     public class UserEntity
     {
         [Key]
@@ -21,5 +20,9 @@ namespace ModelLayer.Model
 
         [Required]
         public string PasswordHash { get; set; }
+
+        public string? ResetToken { get; set; }
+
+        public DateTime? ResetTokenExpiry { get; set; }
     }
 }

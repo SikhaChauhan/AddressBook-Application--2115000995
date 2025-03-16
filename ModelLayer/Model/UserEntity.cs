@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModelLayer.Model
 {
+    //User entity created
     public class UserEntity
     {
         [Key]

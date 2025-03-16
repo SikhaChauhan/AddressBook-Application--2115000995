@@ -57,9 +57,9 @@ namespace AddressBookApplication.Controllers
                 return BadRequest("Invalid contact data.");
             }
 
-            var addedContact = await _service.AddContact(contact);
+            await _service.AddContact(contact);
 
-            return CreatedAtAction(nameof(GetContactById), new { id = addedContact.Id }, addedContact);
+            return CreatedAtAction(nameof(GetContactById), new { id = contact.Id }, contact);
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace BusinessLayer.Service
             _cacheExpiration = TimeSpan.FromMinutes(int.Parse(config["Redis:CacheExpirationMinutes"] ?? "10"));
         }
 
-        public async Task<IEnumerable<AddressBookEntryEntity>> GetAllContacts()
+        public async Task<IEnumerable<AddressBookEntity>> GetAllContacts()
         {
             string cacheKey = "AddressBook:AllContacts";
 
@@ -39,7 +39,7 @@ namespace BusinessLayer.Service
             var cachedData = await _cache.StringGetAsync(cacheKey);
             if (!cachedData.IsNullOrEmpty)
             {
-                return JsonSerializer.Deserialize<List<AddressBookEntryEntity>>(cachedData);
+                return JsonSerializer.Deserialize<List<AddressBookEntity>>(cachedData);
             }
 
             // If not in cache, fetch from database
@@ -50,8 +50,8 @@ namespace BusinessLayer.Service
 
             return contacts;
         }
-        public async Task<AddressBookEntryEntity?> GetContactById(int id) => await _repository.GetContactById(id);
-        public async Task AddContact(AddressBookEntryEntity contact)
+        public async Task<AddressBookEntity?> GetContactById(int id) => await _repository.GetContactById(id);
+        public async Task AddContact(AddressBookEntity contact)
         {
             await _repository.AddContact(contact);
             await _cache.KeyDeleteAsync("AddressBook:AllContacts"); // Clear cache
@@ -60,7 +60,7 @@ namespace BusinessLayer.Service
             var eventMessage = new { ContactName = contact.Name, Email = contact.Email, Event = "ContactAdded" };
             _publisher.PublishMessage(eventMessage, "Contact.Added");
         }
-        public async Task<AddressBookEntryEntity?> UpdateContact(int id, AddressBookEntryEntity contact) => await _repository.UpdateContact(id, contact);
+        public async Task<AddressBookEntity?> UpdateContact(int id, AddressBookEntity contact) => await _repository.UpdateContact(id, contact);
         public async Task<bool> DeleteContact(int id) => await _repository.DeleteContact(id);
     }
 }
